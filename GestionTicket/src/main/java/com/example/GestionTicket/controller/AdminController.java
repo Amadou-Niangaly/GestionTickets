@@ -38,6 +38,8 @@ public class AdminController {
     @PutMapping("/{id}")
     public ResponseEntity<Admin> updateAdmin(@PathVariable Long id, @RequestBody Admin updatedAdmin) {
         Admin admin = adminService.updateAdmin(id, updatedAdmin);
+        String encodedPassword = passwordEncoder.encode(updatedAdmin.getMotDePasse());
+        admin.setMotDePasse(encodedPassword);
         return ResponseEntity.ok(admin);
     }
 

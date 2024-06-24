@@ -5,6 +5,7 @@ import com.example.GestionTicket.service.FormateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,6 +16,8 @@ import java.util.Optional;
 public class FormateurController {
     @Autowired
     private FormateurService formateurService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     // endpoint recuperper tous les formateurs
     @GetMapping
     public List<Formateur> getAllFormateurs() {
@@ -27,9 +30,10 @@ public class FormateurController {
         return formateur.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
     // Endpoint pour créer un formateur
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Formateur> createFormateur(@RequestBody Formateur formateur) {
         Formateur createdFormateur = formateurService.createFormateur(formateur);
+        formateur.setMotDePasse(passwordEncoder.encode(formateur.getMotDePasse()));
         return new ResponseEntity<>(createdFormateur, HttpStatus.CREATED);
     }
 
@@ -38,6 +42,8 @@ public class FormateurController {
     public ResponseEntity<Formateur> updateFormateur(@PathVariable Long id, @RequestBody Formateur formateurDetails) {
         try {
             Formateur updatedFormateur = formateurService.updateFormateur(id, formateurDetails);
+            String encodedPassword = passwordEncoder.encode(formateurDetails.getMotDePasse());
+            updatedFormateur.setMotDePasse(encodedPassword);
             return new ResponseEntity<>(updatedFormateur, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

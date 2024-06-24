@@ -4,6 +4,7 @@ import com.example.GestionTicket.entity.Apprenant;
 import com.example.GestionTicket.service.ApprenantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,8 @@ import java.util.Optional;
 public class ApprenantController {
     @Autowired
     private ApprenantService apprenantService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     //endpoint pour recuperer tous les apprenants
     @GetMapping
@@ -28,8 +31,9 @@ public class ApprenantController {
     }
     //endpoint pour ajouter un nouvel apprenant
 
-    @PostMapping()
+    @PostMapping("/create")
     public Apprenant add(@RequestBody Apprenant apprenant) {
+        apprenant.setMotDePasse(passwordEncoder.encode(apprenant.getMotDePasse()));
         return apprenantService.addApprenant(apprenant);
     }
 //endpoint pour mettre a jour un apprenant existant
@@ -37,6 +41,8 @@ public class ApprenantController {
 public ResponseEntity<Apprenant> updateApprenant(@PathVariable Long id, @RequestBody Apprenant apprenantDetails) {
     try {
         Apprenant updatedApprenant = apprenantService.updateApprenant(id, apprenantDetails);
+        String encodedPassword = passwordEncoder.encode(apprenantDetails.getMotDePasse());
+        updatedApprenant.setMotDePasse(encodedPassword);
         return ResponseEntity.ok(updatedApprenant);
     } catch (RuntimeException e) {
         return ResponseEntity.notFound().build();

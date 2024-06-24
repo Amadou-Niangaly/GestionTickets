@@ -36,10 +36,12 @@ private UtilisateurRepository utilisateurRepository;
 
     private String[] getRoles(Utilisateur user) {
         if(user.getRole()==null){
-            return new  String[]{"USER"} ;
+            return new  String[]{"APPRENANT"} ;
         }
         return user.getRole().split(",");
     }
 
 
 }
+
+

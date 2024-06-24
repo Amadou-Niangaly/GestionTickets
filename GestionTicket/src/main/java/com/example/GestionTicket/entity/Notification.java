@@ -9,6 +9,7 @@ import java.util.Date;
 @Data
 public class Notification {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String message;
     private Date dateEnvoi;

@@ -22,7 +22,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
-    @Autowired
+   @Autowired
     private UserDetailsService userDetailsService;
 
 
@@ -33,7 +33,10 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(registry->{
             registry.requestMatchers("/user").permitAll();
            registry.requestMatchers("/admins").hasRole("ADMIN");
-           registry.requestMatchers("/apprenants").hasAnyRole("USER", "ADMIN");
+           registry.requestMatchers("/apprenants/create").hasRole("ADMIN");
+           registry.requestMatchers("/formateurs/create").hasRole("ADMIN");
+           registry.requestMatchers("/apprenants/**").hasAnyRole("ADMIN", "APPRENANT");
+           registry.requestMatchers("/formateurs/**").hasAnyRole("ADMIN", "FORMATEUR");
          registry.anyRequest().authenticated();
         }).httpBasic(Customizer.withDefaults())
                 .build();
@@ -53,13 +56,15 @@ public class SecurityConfiguration {
                 .build();
         return new InMemoryUserDetailsManager(normalUser, adminlUser);
     }
-    */
+*/
 
 
 @Bean
 public org.springframework.security.core.userdetails.UserDetailsService customUserDetailsService() {
     return  userDetailsService;
 }
+
+
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();

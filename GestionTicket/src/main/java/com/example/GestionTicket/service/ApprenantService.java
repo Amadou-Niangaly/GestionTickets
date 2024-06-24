@@ -33,6 +33,7 @@ public class ApprenantService {
             apprenant.setMotDePasse(apprenantDetails.getMotDePasse());
             apprenant.setFormateur(apprenantDetails.getFormateur());
             apprenant.setNotifications(apprenantDetails.getNotifications());
+            apprenant.setRole(apprenantDetails.getRole());
             apprenant.setTickets(apprenantDetails.getTickets());
             return apprenantRepository.save(apprenant);
         } else {
