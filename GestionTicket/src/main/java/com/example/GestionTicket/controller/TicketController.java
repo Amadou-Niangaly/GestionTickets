@@ -4,6 +4,8 @@ import com.example.GestionTicket.Enum.EtatTicket;
 import com.example.GestionTicket.entity.Ticket;
 import com.example.GestionTicket.service.TicketService;
 import com.example.GestionTicket.service.NotificationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/tickets")
+@Tag(name = "Tickets",description = "Gestion des tickets")
 public class TicketController {
 
     @Autowired
@@ -22,12 +25,14 @@ public class TicketController {
     private NotificationService notificationService;
 
     // Endpoint pour récupérer tous les tickets
+    @Operation(summary = "List",description = "La liste des tickets")
     @GetMapping
     public List<Ticket> getAllTickets() {
         return ticketService.getAllTickets();
     }
 
     // Endpoint pour obtenir un ticket par id
+    @Operation(summary = "Obtenir",description = "obtenir un tickets")
     @GetMapping("/{id}")
     public ResponseEntity<Ticket> getTicketById(@PathVariable int id) {
         Optional<Ticket> ticket = ticketService.getTicketById(id);
@@ -36,6 +41,7 @@ public class TicketController {
 
 
     // Endpoint pour créer un ticket
+    @Operation(summary = "creer",description = "creer un tickets")
     @PostMapping
     public ResponseEntity<Ticket> createTicket(@RequestBody Ticket ticket) {
         Ticket createdTicket = ticketService.createTicket(ticket);
@@ -45,6 +51,7 @@ public class TicketController {
     }
 
     // Endpoint pour modifier un ticket
+    @Operation(summary = "Modifier",description = "Modifier un  ticket")
     @PutMapping("/{id}")
     public ResponseEntity<Ticket> updateTicket(@PathVariable int id, @RequestBody Ticket ticketDetails) {
         Ticket oldTicket = ticketService.getTicketById(id).orElse(null);
@@ -59,6 +66,7 @@ public class TicketController {
     }
 
     // Endpoint pour supprimer un ticket
+    @Operation(summary = "supprimer",description = "supprimer un ticket")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTicket(@PathVariable int id) {
         ticketService.deleteTicket(id);
