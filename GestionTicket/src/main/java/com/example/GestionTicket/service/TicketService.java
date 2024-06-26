@@ -1,5 +1,6 @@
 package com.example.GestionTicket.service;
 
+import com.example.GestionTicket.Enum.EtatTicket;
 import com.example.GestionTicket.entity.Ticket;
 import com.example.GestionTicket.repository.TicketRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +27,16 @@ public class TicketService {
     public Ticket createTicket(Ticket ticket) {
         return ticketRepository.save(ticket);
     }
-    //modifier un ticket deja existant
+    // Modifier un ticket déjà existant
     public Ticket updateTicket(int id, Ticket ticketDetails) {
         Optional<Ticket> optionalTicket = ticketRepository.findById(id);
         if (optionalTicket.isPresent()) {
             Ticket ticket = optionalTicket.get();
+
+            // Enregistrer l'état actuel avant la mise à jour
+            EtatTicket oldState = ticket.getEtat();
+
+            // Mettre à jour les attributs du ticket
             ticket.setDescription(ticketDetails.getDescription());
             ticket.setUrgence(ticketDetails.getUrgence());
             ticket.setEtat(ticketDetails.getEtat());
@@ -41,10 +47,9 @@ public class TicketService {
 
             Ticket updatedTicket = ticketRepository.save(ticket);
 
-            // Check if ticket state has changed
-            String oldState = ticket.getEtat().toString();
-            String newState = ticketDetails.getEtat().toString();
-            if (!oldState.equals(newState)) {
+            // Notifier si l'état du ticket a changé
+            EtatTicket newState = updatedTicket.getEtat();
+            if (oldState != newState) {
                 notificationService.notifyTicketStateChange(updatedTicket, oldState, newState);
             }
 
