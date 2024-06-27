@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
+
+
 @Entity
 @Data
 public class Notification {
@@ -12,7 +14,7 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String message;
-    private Date dateEnvoi;
+    private LocalDate dateEnvoi;
 
     @ManyToOne
     @JoinColumn(name = "apprenant_id")

@@ -34,12 +34,11 @@ public class Ticket {
 
     private LocalDate dateResolution;
 
-    @ManyToOne // Assurez-vous que le fetch type est correct
+    @ManyToOne(cascade = CascadeType.PERSIST) // Assurez-vous que le fetch type est correct
     @JoinColumn(name = "apprenant_id")
 
     private Apprenant apprenant;
-
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "formateur_id")
     private Formateur formateur;
 

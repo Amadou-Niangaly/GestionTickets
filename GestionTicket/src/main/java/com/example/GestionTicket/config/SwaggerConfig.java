@@ -16,7 +16,7 @@ public class SwaggerConfig {
                 .components(new Components())
                 .info(new Info()
                 .title("Gestion Ticket")
-                        .description("fcds")
+                        .description("Une application de gestion des tikets")
                         .version("0.0.1")
                         .termsOfService("http://swagger.io/terms")
                         .contact(new Contact().name("Amadou Niangaly").email("amadouniangaly16@gmail.com"))
